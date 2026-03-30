@@ -20,6 +20,11 @@ export default function App() {
         <Route path="/result" element={<ResultPage />} />
         <Route path="/node/:id" element={<NodeDetailPage />} />
       </Routes>
+      <footer className="footer">
+        <a href="https://x.com/yut_720" target="_blank" rel="noopener noreferrer">
+          @yut_720
+        </a>
+      </footer>
     </div>
   );
 }
