@@ -47,6 +47,11 @@ export interface EdgeResult {
   connections: Connection[];
 }
 
+export interface RegisterResult {
+  node: Node;
+  isNew: boolean;
+}
+
 export const api = {
   getRandomNode: () => request<Node>("/nodes/random"),
 
@@ -59,5 +64,11 @@ export const api = {
     request<EdgeResult>("/edges", {
       method: "POST",
       body: JSON.stringify({ fromNodeId, youtubeUrl, comment }),
+    }),
+
+  registerNode: (youtubeUrl: string) =>
+    request<RegisterResult>("/nodes", {
+      method: "POST",
+      body: JSON.stringify({ youtubeUrl }),
     }),
 };

@@ -1,35 +1,49 @@
-import { useState, useEffect } from "react";
-import { useParams, useSearchParams, useNavigate } from "react-router-dom";
+import { useState, useEffect, useCallback } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { api, type Node as NodeType } from "../api/client";
 import YouTubeEmbed from "../components/YouTubeEmbed";
 
 export default function ConnectPage() {
   const { id } = useParams();
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   const [fromNode, setFromNode] = useState<NodeType | null>(null);
-  const [youtubeUrl, setYoutubeUrl] = useState(searchParams.get("seedUrl") || "");
+  const [youtubeUrl, setYoutubeUrl] = useState("");
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(false);
+  const [rerolling, setRerolling] = useState(false);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    const load = async () => {
-      try {
-        if (id) {
-          const detail = await api.getNode(id);
-          setFromNode(detail.node);
-        } else {
-          const node = await api.getRandomNode();
-          setFromNode(node);
-        }
-      } catch (err: any) {
-        setError(err.message || "曲の取得に失敗しました");
+  const loadNode = useCallback(async (nodeId?: string) => {
+    try {
+      if (nodeId) {
+        const detail = await api.getNode(nodeId);
+        setFromNode(detail.node);
+      } else {
+        const node = await api.getRandomNode();
+        setFromNode(node);
       }
-    };
-    load();
-  }, [id]);
+    } catch (err: any) {
+      setError(err.message || "曲の取得に失敗しました");
+    }
+  }, []);
+
+  useEffect(() => {
+    loadNode(id);
+  }, [id, loadNode]);
+
+  const handleReroll = async () => {
+    setRerolling(true);
+    setError("");
+    try {
+      const node = await api.getRandomNode();
+      setFromNode(node);
+    } catch (err: any) {
+      setError(err.message || "曲の取得に失敗しました");
+    } finally {
+      setRerolling(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,6 +83,13 @@ export default function ConnectPage() {
             <div style={{ fontWeight: 700 }}>{fromNode.title}</div>
             <div className="text-sm text-muted">{fromNode.channel_name}</div>
           </div>
+          <button
+            className="btn btn-outline mt-8"
+            onClick={handleReroll}
+            disabled={rerolling}
+          >
+            {rerolling ? "読み込み中..." : "別の曲にする"}
+          </button>
         </>
       )}
 
