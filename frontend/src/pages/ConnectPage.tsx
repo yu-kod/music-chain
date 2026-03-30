@@ -47,7 +47,7 @@ export default function ConnectPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!fromNode || !youtubeUrl.trim() || !comment.trim()) return;
+    if (!fromNode || !youtubeUrl.trim()) return;
     if (comment.length > 30) return;
 
     setLoading(true);
@@ -83,13 +83,21 @@ export default function ConnectPage() {
             <div style={{ fontWeight: 700 }}>{fromNode.title}</div>
             <div className="text-sm text-muted">{fromNode.channel_name}</div>
           </div>
-          <button
-            className="btn btn-outline mt-8"
-            onClick={handleReroll}
-            disabled={rerolling}
-          >
-            {rerolling ? "読み込み中..." : "別の曲にする"}
-          </button>
+          <div style={{ display: "flex", gap: 8 }} className="mt-8">
+            <button
+              className="btn btn-outline"
+              onClick={handleReroll}
+              disabled={rerolling}
+            >
+              {rerolling ? "読み込み中..." : "別の曲にする"}
+            </button>
+            <button
+              className="btn btn-outline"
+              onClick={() => navigate(`/node/${fromNode.id}`)}
+            >
+              つながりを見る
+            </button>
+          </div>
         </>
       )}
 
@@ -121,7 +129,7 @@ export default function ConnectPage() {
         <button
           className="btn mt-16"
           type="submit"
-          disabled={loading || !youtubeUrl.trim() || !comment.trim()}
+          disabled={loading || !youtubeUrl.trim()}
         >
           {loading ? "投稿中..." : "つなぐ！"}
         </button>

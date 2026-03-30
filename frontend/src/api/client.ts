@@ -25,8 +25,8 @@ export interface Node {
 }
 
 export interface Connection extends Node {
-  comment: string;
-  connection_count?: number;
+  comments: string[];
+  connection_count: number;
 }
 
 export interface NodeDetail {

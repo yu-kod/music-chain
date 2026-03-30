@@ -9,7 +9,7 @@ export default function App() {
     <div className="container">
       <Link to="/" style={{ textDecoration: "none" }}>
         <header className="header">
-          <h1>ムジックチェーン</h1>
+          <h1>Music Chain</h1>
           <p>みんなで育てる音楽ネットワーク地図</p>
         </header>
       </Link>

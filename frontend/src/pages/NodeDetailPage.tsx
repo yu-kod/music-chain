@@ -55,7 +55,7 @@ export default function NodeDetailPage() {
             つながっている曲（{connections.length}件）
           </p>
           {connections.map((c) => (
-            <NodeCard key={`${c.id}-${c.comment}`} node={c} />
+            <NodeCard key={c.id} node={c} />
           ))}
         </>
       )}

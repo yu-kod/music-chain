@@ -5,7 +5,14 @@
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
-    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install"
+    "build:lambda": "cd backend && npm run build:lambda",
+    "build:frontend": "cd frontend && npm run build",
+    "build": "npm run build:lambda && npm run build:frontend",
+    "deploy": "npm run build && cd infra && terraform apply",
+    "deploy:sync": "bash -c \"aws s3 sync frontend/dist/ s3://$(cd infra && terraform output -raw frontend_bucket_name) --delete\"",
+    "deploy:invalidate": "bash -c \"aws cloudfront create-invalidation --distribution-id $(cd infra && terraform output -raw cloudfront_distribution_id) --paths '/*'\"",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "seed": "cd backend && npm run seed"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
