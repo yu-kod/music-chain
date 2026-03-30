@@ -9,8 +9,8 @@
     "build:frontend": "cd frontend && npm run build",
     "build": "npm run build:lambda && npm run build:frontend",
     "deploy": "npm run build && cd infra && terraform apply",
-    "deploy:sync": "bash -c \"aws s3 sync frontend/dist/ s3://$(cd infra && terraform output -raw frontend_bucket_name) --delete\"",
-    "deploy:invalidate": "bash -c \"aws cloudfront create-invalidation --distribution-id $(cd infra && terraform output -raw cloudfront_distribution_id) --paths '/*'\"",
+    "deploy:sync": "aws s3 sync frontend/dist/ s3://music-chain-frontend-20260330161636932600000001 --delete",
+    "deploy:invalidate": "aws cloudfront create-invalidation --distribution-id EHDXJUNB26EIE --paths /*",
     "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
     "seed": "cd backend && npm run seed"
   },
