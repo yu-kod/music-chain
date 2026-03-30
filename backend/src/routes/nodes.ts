@@ -1,5 +1,6 @@
 import { Router, Request, Response } from "express";
 import { getDb } from "../db/schema";
+import { extractVideoId, fetchVideoInfo } from "../services/youtube";
 
 const router = Router();
 
@@ -53,6 +54,39 @@ router.get("/:id", (req: Request, res: Response) => {
     .all(req.params.id, req.params.id, req.params.id, req.params.id);
 
   res.json({ node, connections });
+});
+
+// POST /api/nodes - 曲を単体登録
+router.post("/", async (req: Request, res: Response) => {
+  const { youtubeUrl } = req.body;
+  if (!youtubeUrl) {
+    res.status(400).json({ error: "youtubeUrl is required" });
+    return;
+  }
+
+  const videoId = extractVideoId(youtubeUrl);
+  if (!videoId) {
+    res.status(400).json({ error: "Invalid YouTube URL" });
+    return;
+  }
+
+  const db = getDb();
+  const existing = db.prepare("SELECT * FROM nodes WHERE id = ?").get(videoId);
+  if (existing) {
+    res.json({ node: existing, isNew: false });
+    return;
+  }
+
+  try {
+    const info = await fetchVideoInfo(videoId);
+    db.prepare(
+      "INSERT INTO nodes (id, title, thumbnail_url, channel_name) VALUES (?, ?, ?, ?)"
+    ).run(videoId, info.title, info.thumbnailUrl, info.channelName);
+    const node = db.prepare("SELECT * FROM nodes WHERE id = ?").get(videoId);
+    res.status(201).json({ node, isNew: true });
+  } catch {
+    res.status(400).json({ error: "Failed to fetch YouTube video info" });
+  }
 });
 
 export default router;

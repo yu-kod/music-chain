@@ -7,23 +7,39 @@ export default function HomePage() {
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [notFound, setNotFound] = useState(false);
+  const [registering, setRegistering] = useState(false);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!url.trim()) return;
     setLoading(true);
     setError("");
+    setNotFound(false);
     try {
       const result = await api.search(url.trim());
       if (result.found) {
         navigate(`/node/${result.node!.id}`);
       } else {
-        navigate(`/connect?seedUrl=${encodeURIComponent(url.trim())}`);
+        setNotFound(true);
       }
     } catch (err: any) {
       setError(err.message || "検索に失敗しました");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleRegister = async () => {
+    setRegistering(true);
+    setError("");
+    try {
+      const result = await api.registerNode(url.trim());
+      navigate(`/node/${result.node.id}`);
+    } catch (err: any) {
+      setError(err.message || "登録に失敗しました");
+    } finally {
+      setRegistering(false);
     }
   };
 
@@ -49,12 +65,28 @@ export default function HomePage() {
           type="text"
           placeholder="https://www.youtube.com/watch?v=..."
           value={url}
-          onChange={(e) => setUrl(e.target.value)}
+          onChange={(e) => {
+            setUrl(e.target.value);
+            setNotFound(false);
+          }}
         />
         <button className="btn mt-12" type="submit" disabled={loading}>
           検索する
         </button>
       </form>
+
+      {notFound && (
+        <div className="card mt-12 text-center">
+          <p className="mb-8">まだ誰もつないでいない曲です</p>
+          <button
+            className="btn"
+            onClick={handleRegister}
+            disabled={registering}
+          >
+            {registering ? "登録中..." : "この曲を登録する"}
+          </button>
+        </div>
+      )}
 
       <hr className="divider" />
 
