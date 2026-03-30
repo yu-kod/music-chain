@@ -12,3 +12,6 @@ dist/
 .terraform.lock.hcl
 
 .DS_Store
+.claude/
+.serena/
+tsconfig.tsbuildinfo
