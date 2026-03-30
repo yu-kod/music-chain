@@ -28,6 +28,12 @@ export default function ResultPage() {
 
   const { isFirst, fromNode, toNode, connections } = state;
 
+  const tweetText = isFirst
+    ? `「${fromNode.title}」と「${toNode.title}」を最初につなぎました！\n#MusicChain`
+    : `「${fromNode.title}」と「${toNode.title}」をつなぎました！\n#MusicChain`;
+  const tweetUrl = `https://music-chain.yu-web.site/node/${toNode.id}`;
+  const twitterHref = `https://x.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(tweetUrl)}`;
+
   return (
     <>
       {isFirst ? (
@@ -60,6 +66,15 @@ export default function ResultPage() {
       )}
 
       <hr className="divider" />
+      <a
+        className="btn btn-tweet"
+        href={twitterHref}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ textDecoration: "none", marginBottom: 8 }}
+      >
+        Xでシェア
+      </a>
       <div style={{ display: "flex", gap: 8 }}>
         <button
           className="btn btn-outline"

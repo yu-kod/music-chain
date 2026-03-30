@@ -74,6 +74,16 @@ a:hover {
   cursor: not-allowed;
 }
 
+.btn-tweet {
+  background: #000;
+  color: #fff;
+  border: 1px solid #333;
+}
+
+.btn-tweet:hover:not(:disabled) {
+  background: #1a1a1a;
+}
+
 .btn-outline {
   background: transparent;
   border: 2px solid var(--primary);
