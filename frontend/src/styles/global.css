@@ -347,6 +347,24 @@ a:hover {
   margin-top: 24px;
 }
 
+.btn-kofi {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: #5570c4;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.btn-kofi:hover {
+  opacity: 0.85;
+  color: #fff;
+}
+
 .footer {
   text-align: center;
   padding: 32px 0 16px;
