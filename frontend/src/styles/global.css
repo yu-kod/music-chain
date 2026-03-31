@@ -310,15 +310,16 @@ a:hover {
   gap: 4px;
 }
 
+.tooltip-wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
 .hint-toggle {
   display: flex;
   align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
   color: var(--text-muted);
   cursor: pointer;
-  padding: 2px;
   transition: color 0.2s;
 }
 
@@ -326,7 +327,13 @@ a:hover {
   color: var(--primary);
 }
 
-.hint-box {
+.tooltip-bubble {
+  display: none;
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 10px);
+  transform: translateX(-30%);
+  width: 260px;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -334,15 +341,37 @@ a:hover {
   font-size: 13px;
   color: var(--text-muted);
   line-height: 1.8;
+  z-index: 10;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
-.hint-box p {
+.tooltip-bubble::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 30%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--border);
+}
+
+.tooltip-bubble p {
   margin-bottom: 4px;
 }
 
-.hint-box ul {
+.tooltip-bubble ul {
   padding-left: 18px;
   margin: 0;
+}
+
+.tooltip-wrapper:hover .tooltip-bubble {
+  display: block;
+}
+
+@media (hover: none) {
+  .tooltip-wrapper:active .tooltip-bubble {
+    display: block;
+  }
 }
 
 .footer {
