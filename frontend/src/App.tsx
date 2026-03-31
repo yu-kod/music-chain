@@ -10,7 +10,7 @@ export default function App() {
       <Link to="/" style={{ textDecoration: "none" }}>
         <header className="header">
           <h1>Music Chain</h1>
-          <p>みんなで育てる音楽ネットワーク地図</p>
+          <p>好きな曲をつなげて、音楽のつながりを広げよう</p>
         </header>
       </Link>
       <Routes>
