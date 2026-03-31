@@ -3,6 +3,7 @@ import HomePage from "./pages/HomePage";
 import ConnectPage from "./pages/ConnectPage";
 import ResultPage from "./pages/ResultPage";
 import NodeDetailPage from "./pages/NodeDetailPage";
+import PrivacyPage from "./pages/PrivacyPage";
 
 export default function App() {
   return (
@@ -19,8 +20,11 @@ export default function App() {
         <Route path="/connect/:id" element={<ConnectPage />} />
         <Route path="/result" element={<ResultPage />} />
         <Route path="/node/:id" element={<NodeDetailPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
       </Routes>
       <footer className="footer">
+        <Link to="/privacy">プライバシーポリシー</Link>
+        <span className="footer-divider">|</span>
         <a href="https://x.com/yut_720" target="_blank" rel="noopener noreferrer">
           @yut_720
         </a>
