@@ -59,20 +59,19 @@ export default function HomePage() {
 
   return (
     <>
-      <div className="text-center">
-        <p className="text-muted mb-12">
-          ランダムな曲に出会って、つなげてみよう
-        </p>
-        <button
-          className="btn"
-          onClick={handleRandom}
-          disabled={loading}
-        >
-          {loading ? "読み込み中..." : "ランダムにつなぐ"}
-        </button>
-      </div>
+      <button
+        className="btn"
+        onClick={handleRandom}
+        disabled={loading}
+      >
+        {loading ? "読み込み中..." : "ランダムにつなぐ"}
+      </button>
 
-      <hr className="divider" />
+      <div className="home-or">
+        <hr className="home-or-line" />
+        <span className="home-or-text">or</span>
+        <hr className="home-or-line" />
+      </div>
 
       <form onSubmit={handleSearch}>
         <label className="label">YouTube URLで曲を検索</label>

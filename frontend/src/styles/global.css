@@ -322,6 +322,25 @@ a:hover {
   color: var(--primary);
 }
 
+.home-or {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.home-or-line {
+  flex: 1;
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 0;
+}
+
+.home-or-text {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
 .footer {
   text-align: center;
   padding: 32px 0 16px;
