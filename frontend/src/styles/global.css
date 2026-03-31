@@ -369,16 +369,15 @@ a:hover {
 
 .marquee-item {
   display: flex;
-  gap: 8px;
-  align-items: center;
+  flex-direction: column;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 8px 12px;
+  overflow: hidden;
   cursor: pointer;
   transition: border-color 0.2s;
-  min-width: 220px;
-  max-width: 260px;
+  width: 180px;
+  flex-shrink: 0;
 }
 
 .marquee-item:hover {
@@ -386,15 +385,14 @@ a:hover {
 }
 
 .marquee-item img {
-  width: 48px;
-  height: 36px;
-  border-radius: 6px;
+  width: 100%;
+  aspect-ratio: 16 / 9;
   object-fit: cover;
-  flex-shrink: 0;
+  display: block;
 }
 
 .marquee-item-info {
-  flex: 1;
+  padding: 8px 10px;
   min-width: 0;
 }
 
@@ -409,6 +407,7 @@ a:hover {
 .marquee-item-channel {
   font-size: 11px;
   color: var(--text-muted);
+  margin-top: 2px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
