@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { api, type Node as NodeType } from "../api/client";
 import YouTubeEmbed from "../components/YouTubeEmbed";
+import { isValidYoutubeUrl } from "../utils/youtube";
 
 export default function ConnectPage() {
   const { id } = useParams();
@@ -47,7 +48,7 @@ export default function ConnectPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!fromNode || !youtubeUrl.trim()) return;
+    if (!fromNode || !youtubeUrl.trim() || !isValidYoutubeUrl(youtubeUrl.trim())) return;
     if (comment.length > 30) return;
 
     setLoading(true);
@@ -110,6 +111,9 @@ export default function ConnectPage() {
           value={youtubeUrl}
           onChange={(e) => setYoutubeUrl(e.target.value)}
         />
+        {youtubeUrl.trim() && !isValidYoutubeUrl(youtubeUrl.trim()) && (
+          <p className="error mt-8">YouTube の URL を入力してください</p>
+        )}
 
         <div className="mt-12">
           <label className="label">つながりの理由（一言コメント）</label>
@@ -129,7 +133,7 @@ export default function ConnectPage() {
         <button
           className="btn mt-16"
           type="submit"
-          disabled={loading || !youtubeUrl.trim()}
+          disabled={loading || !youtubeUrl.trim() || !isValidYoutubeUrl(youtubeUrl.trim())}
         >
           {loading ? "投稿中..." : "つなぐ！"}
         </button>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../api/client";
+import { isValidYoutubeUrl } from "../utils/youtube";
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ export default function HomePage() {
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!url.trim()) return;
+    if (!url.trim() || !isValidYoutubeUrl(url.trim())) return;
     setLoading(true);
     setError("");
     setNotFound(false);
@@ -70,7 +71,10 @@ export default function HomePage() {
             setNotFound(false);
           }}
         />
-        <button className="btn mt-12" type="submit" disabled={loading}>
+        {url.trim() && !isValidYoutubeUrl(url.trim()) && (
+          <p className="error mt-8">YouTube の URL を入力してください</p>
+        )}
+        <button className="btn mt-12" type="submit" disabled={loading || (!!url.trim() && !isValidYoutubeUrl(url.trim()))}>
           検索する
         </button>
       </form>
