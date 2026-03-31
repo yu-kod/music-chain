@@ -97,22 +97,32 @@ a:hover {
 
 .search-row {
   display: flex;
-  gap: 8px;
-  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.search-row:focus-within {
+  border-color: var(--primary);
 }
 
 .search-row .input {
   flex: 1;
+  border: none;
+  border-radius: 0;
+}
+
+.search-row .input:focus {
+  border-color: transparent;
 }
 
 .btn-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 48px;
   border: none;
-  border-radius: 50%;
   background: var(--primary);
   color: white;
   cursor: pointer;
