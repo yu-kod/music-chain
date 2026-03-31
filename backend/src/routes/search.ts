@@ -1,11 +1,11 @@
 import { Router, Request, Response } from "express";
 import { getNodeById } from "../db/nodes";
 import { getConnections } from "../db/edges";
-import { extractVideoId } from "../services/youtube";
+import { parseUrl } from "../services/music";
 
 const router = Router();
 
-// GET /api/search?url=... - YouTube URLで曲を検索
+// GET /api/search?url=... - URLで曲を検索
 router.get("/", async (req: Request, res: Response) => {
   const url = req.query.url as string;
   if (!url) {
@@ -13,20 +13,20 @@ router.get("/", async (req: Request, res: Response) => {
     return;
   }
 
-  const videoId = extractVideoId(url);
-  if (!videoId) {
-    res.status(400).json({ error: "Invalid YouTube URL" });
+  const parsed = parseUrl(url);
+  if (!parsed) {
+    res.status(400).json({ error: "Invalid YouTube or Spotify URL" });
     return;
   }
 
   try {
-    const node = await getNodeById(videoId);
+    const node = await getNodeById(parsed.nodeId);
     if (!node) {
-      res.json({ found: false, videoId });
+      res.json({ found: false, nodeId: parsed.nodeId });
       return;
     }
 
-    const connections = await getConnections(videoId, 10);
+    const connections = await getConnections(parsed.nodeId, 10);
     res.json({ found: true, node, connections });
   } catch (error) {
     console.error("Failed to search:", error);

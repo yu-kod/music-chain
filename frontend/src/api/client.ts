@@ -60,15 +60,15 @@ export const api = {
   search: (url: string) =>
     request<SearchResult>(`/search?url=${encodeURIComponent(url)}`),
 
-  createEdge: (fromNodeId: string, youtubeUrl: string, comment: string) =>
+  createEdge: (fromNodeId: string, url: string, comment: string) =>
     request<EdgeResult>("/edges", {
       method: "POST",
-      body: JSON.stringify({ fromNodeId, youtubeUrl, comment }),
+      body: JSON.stringify({ fromNodeId, url, comment }),
     }),
 
-  registerNode: (youtubeUrl: string) =>
+  registerNode: (url: string) =>
     request<RegisterResult>("/nodes", {
       method: "POST",
-      body: JSON.stringify({ youtubeUrl }),
+      body: JSON.stringify({ url }),
     }),
 };

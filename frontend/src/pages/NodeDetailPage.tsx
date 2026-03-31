@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { api, type Node as NodeType, type Connection } from "../api/client";
-import YouTubeEmbed from "../components/YouTubeEmbed";
+import MusicEmbed from "../components/MusicEmbed";
 import NodeCard from "../components/NodeCard";
 
 export default function NodeDetailPage() {
@@ -35,7 +35,7 @@ export default function NodeDetailPage() {
 
   return (
     <>
-      <YouTubeEmbed videoId={node.id} />
+      <MusicEmbed nodeId={node.id} />
       <div className="card">
         <div style={{ fontWeight: 700, fontSize: 18 }}>{node.title}</div>
         <div className="text-sm text-muted mt-8">{node.channel_name}</div>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../api/client";
-import { isValidYoutubeUrl } from "../utils/youtube";
+import { isValidMusicUrl } from "../utils/music";
 import SampleMarquee from "../components/SampleMarquee";
 
 export default function HomePage() {
@@ -14,7 +14,7 @@ export default function HomePage() {
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!url.trim() || !isValidYoutubeUrl(url.trim())) return;
+    if (!url.trim() || !isValidMusicUrl(url.trim())) return;
     setLoading(true);
     setError("");
     setNotFound(false);
@@ -75,7 +75,7 @@ export default function HomePage() {
       </div>
 
       <form onSubmit={handleSearch}>
-        <label className="label">YouTube URLで曲を検索</label>
+        <label className="label">URLで曲を検索（YouTube / Spotify）</label>
         <div className="search-row">
           <input
             className="input"
@@ -90,13 +90,13 @@ export default function HomePage() {
           <button
             className="btn-icon"
             type="submit"
-            disabled={loading || !url.trim() || !isValidYoutubeUrl(url.trim())}
+            disabled={loading || !url.trim() || !isValidMusicUrl(url.trim())}
           >
             <span className="material-icons">search</span>
           </button>
         </div>
-        {url.trim() && !isValidYoutubeUrl(url.trim()) && (
-          <p className="error mt-8">YouTube の URL を入力してください</p>
+        {url.trim() && !isValidMusicUrl(url.trim()) && (
+          <p className="error mt-8">YouTube または Spotify の URL を入力してください</p>
         )}
       </form>
 

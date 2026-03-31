@@ -3,15 +3,15 @@ import { useParams, useNavigate } from "react-router-dom";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import { api, type Node as NodeType } from "../api/client";
-import YouTubeEmbed from "../components/YouTubeEmbed";
-import { isValidYoutubeUrl } from "../utils/youtube";
+import MusicEmbed from "../components/MusicEmbed";
+import { isValidMusicUrl } from "../utils/music";
 
 export default function ConnectPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const [fromNode, setFromNode] = useState<NodeType | null>(null);
-  const [youtubeUrl, setYoutubeUrl] = useState("");
+  const [url, setUrl] = useState("");
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(false);
   const [rerolling, setRerolling] = useState(false);
@@ -50,13 +50,13 @@ export default function ConnectPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!fromNode || !youtubeUrl.trim() || !isValidYoutubeUrl(youtubeUrl.trim())) return;
+    if (!fromNode || !url.trim() || !isValidMusicUrl(url.trim())) return;
     if (comment.length > 30) return;
 
     setLoading(true);
     setError("");
     try {
-      const result = await api.createEdge(fromNode.id, youtubeUrl.trim(), comment.trim());
+      const result = await api.createEdge(fromNode.id, url.trim(), comment.trim());
       navigate("/result", {
         state: {
           isFirst: result.isFirst,
@@ -104,7 +104,7 @@ export default function ConnectPage() {
               </span>
             </Tippy>
           </div>
-          <YouTubeEmbed videoId={fromNode.id} />
+          <MusicEmbed nodeId={fromNode.id} />
           <div className="card">
             <div style={{ fontWeight: 700 }}>{fromNode.title}</div>
             <div className="text-sm text-muted">{fromNode.channel_name}</div>
@@ -128,16 +128,16 @@ export default function ConnectPage() {
       )}
 
       <form onSubmit={handleSubmit} className="mt-16">
-        <label className="label">つなぎたい曲のYouTube URL</label>
+        <label className="label">つなぎたい曲の URL（YouTube / Spotify）</label>
         <input
           className="input"
           type="text"
-          placeholder="https://www.youtube.com/watch?v=..."
-          value={youtubeUrl}
-          onChange={(e) => setYoutubeUrl(e.target.value)}
+          placeholder="https://www.youtube.com/watch?v=... or https://open.spotify.com/track/..."
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
         />
-        {youtubeUrl.trim() && !isValidYoutubeUrl(youtubeUrl.trim()) && (
-          <p className="error mt-8">YouTube の URL を入力してください</p>
+        {url.trim() && !isValidMusicUrl(url.trim()) && (
+          <p className="error mt-8">YouTube または Spotify の URL を入力してください</p>
         )}
 
         <div className="mt-12">
@@ -158,7 +158,7 @@ export default function ConnectPage() {
         <button
           className="btn mt-16"
           type="submit"
-          disabled={loading || !youtubeUrl.trim() || !isValidYoutubeUrl(youtubeUrl.trim())}
+          disabled={loading || !url.trim() || !isValidMusicUrl(url.trim())}
         >
           {loading ? "投稿中..." : "つなぐ！"}
         </button>

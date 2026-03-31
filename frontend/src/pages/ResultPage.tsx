@@ -1,6 +1,6 @@
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import type { Node as NodeType, Connection } from "../api/client";
-import YouTubeEmbed from "../components/YouTubeEmbed";
+import MusicEmbed from "../components/MusicEmbed";
 import NodeCard from "../components/NodeCard";
 
 interface ResultState {
@@ -47,7 +47,7 @@ export default function ResultPage() {
       )}
 
       <p className="text-sm text-muted mb-8">つないだ曲</p>
-      <YouTubeEmbed videoId={toNode.id} />
+      <MusicEmbed nodeId={toNode.id} />
       <div className="card">
         <div style={{ fontWeight: 700 }}>{toNode.title}</div>
         <div className="text-sm text-muted">{toNode.channel_name}</div>
