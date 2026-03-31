@@ -1,9 +1,9 @@
-export type MusicPlatform = "youtube" | "spotify" | "niconico";
+export type MusicPlatform = "youtube" | "spotify" | "niconico" | "soundcloud";
 
 export interface ParsedUrl {
   platform: MusicPlatform;
   rawId: string;
-  nodeId: string; // "yt:xxx", "sp:xxx", "nc:xxx"
+  nodeId: string; // "yt:xxx", "sp:xxx", "nc:xxx", "sc:user/track"
 }
 
 export interface TrackInfo {
@@ -21,6 +21,9 @@ const SPOTIFY_PATTERN =
 const NICONICO_PATTERN =
   /(?:nicovideo\.jp\/watch\/|nico\.ms\/)((?:sm|nm|so)\d+)/;
 
+const SOUNDCLOUD_PATTERN =
+  /soundcloud\.com\/([\w-]+\/[\w-]+)/;
+
 export function parseUrl(url: string): ParsedUrl | null {
   const ytMatch = url.match(YOUTUBE_PATTERN);
   if (ytMatch) {
@@ -37,35 +40,58 @@ export function parseUrl(url: string): ParsedUrl | null {
     return { platform: "niconico", rawId: ncMatch[1], nodeId: `nc:${ncMatch[1]}` };
   }
 
+  const scMatch = url.match(SOUNDCLOUD_PATTERN);
+  if (scMatch) {
+    return { platform: "soundcloud", rawId: scMatch[1], nodeId: `sc:${scMatch[1]}` };
+  }
+
   return null;
+}
+
+interface OEmbedResponse {
+  title: string;
+  author_name?: string;
+  thumbnail_url?: string;
+}
+
+async function fetchOEmbed(oembedUrl: string, label: string): Promise<OEmbedResponse> {
+  const res = await fetch(oembedUrl);
+  if (!res.ok) {
+    throw new Error(`${label} oEmbed API error: ${res.status}`);
+  }
+  return (await res.json()) as OEmbedResponse;
 }
 
 export async function fetchTrackInfo(parsed: ParsedUrl): Promise<TrackInfo> {
   if (parsed.platform === "youtube") {
-    const oembedUrl = `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${parsed.rawId}&format=json`;
-    const res = await fetch(oembedUrl);
-    if (!res.ok) {
-      throw new Error(`YouTube oEmbed API error: ${res.status}`);
-    }
-    const data = (await res.json()) as { title: string; author_name: string };
+    const data = await fetchOEmbed(
+      `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${parsed.rawId}&format=json`,
+      "YouTube"
+    );
     return {
       title: data.title,
-      channelName: data.author_name,
+      channelName: data.author_name ?? "",
       thumbnailUrl: `https://img.youtube.com/vi/${parsed.rawId}/mqdefault.jpg`,
     };
   }
 
   if (parsed.platform === "spotify") {
-    const oembedUrl = `https://open.spotify.com/oembed?url=https://open.spotify.com/track/${parsed.rawId}`;
-    const res = await fetch(oembedUrl);
-    if (!res.ok) {
-      throw new Error(`Spotify oEmbed API error: ${res.status}`);
-    }
-    const data = (await res.json()) as {
-      title: string;
-      author_name?: string;
-      thumbnail_url?: string;
+    const data = await fetchOEmbed(
+      `https://open.spotify.com/oembed?url=https://open.spotify.com/track/${parsed.rawId}`,
+      "Spotify"
+    );
+    return {
+      title: data.title,
+      channelName: data.author_name ?? "",
+      thumbnailUrl: data.thumbnail_url ?? "",
     };
+  }
+
+  if (parsed.platform === "soundcloud") {
+    const data = await fetchOEmbed(
+      `https://soundcloud.com/oembed?url=https://soundcloud.com/${parsed.rawId}&format=json`,
+      "SoundCloud"
+    );
     return {
       title: data.title,
       channelName: data.author_name ?? "",

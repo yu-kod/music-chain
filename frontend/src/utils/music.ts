@@ -7,6 +7,9 @@ const SPOTIFY_PATTERN =
 const NICONICO_PATTERN =
   /(?:nicovideo\.jp\/watch\/|nico\.ms\/)((?:sm|nm|so)\d+)/;
 
+const SOUNDCLOUD_PATTERN =
+  /soundcloud\.com\/([\w-]+\/[\w-]+)/;
+
 export function isValidMusicUrl(url: string): boolean {
-  return YOUTUBE_PATTERN.test(url) || SPOTIFY_PATTERN.test(url) || NICONICO_PATTERN.test(url);
+  return YOUTUBE_PATTERN.test(url) || SPOTIFY_PATTERN.test(url) || NICONICO_PATTERN.test(url) || SOUNDCLOUD_PATTERN.test(url);
 }

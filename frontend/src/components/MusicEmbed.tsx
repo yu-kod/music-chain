@@ -31,6 +31,19 @@ export default function MusicEmbed({ nodeId }: Props) {
     );
   }
 
+  if (nodeId.startsWith("sc:")) {
+    const path = nodeId.slice(3);
+    return (
+      <div className="soundcloud-embed">
+        <iframe
+          src={`https://w.soundcloud.com/player/?url=https%3A%2F%2Fsoundcloud.com%2F${encodeURIComponent(path)}&color=%23e94560&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false`}
+          allow="autoplay"
+          title="SoundCloud track"
+        />
+      </div>
+    );
+  }
+
   // YouTube (yt: prefix or legacy)
   const videoId = nodeId.startsWith("yt:") ? nodeId.slice(3) : nodeId;
   return (
