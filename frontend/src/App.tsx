@@ -4,6 +4,7 @@ import ConnectPage from "./pages/ConnectPage";
 import ResultPage from "./pages/ResultPage";
 import NodeDetailPage from "./pages/NodeDetailPage";
 import PrivacyPage from "./pages/PrivacyPage";
+import KofiButton from "./components/KofiButton";
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
         <Route path="/node/:id" element={<NodeDetailPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
       </Routes>
+      <KofiButton />
       <footer className="footer">
         <Link to="/privacy">プライバシーポリシー</Link>
         <span className="footer-divider">|</span>
