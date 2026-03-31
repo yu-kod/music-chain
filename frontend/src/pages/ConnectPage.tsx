@@ -14,6 +14,7 @@ export default function ConnectPage() {
   const [loading, setLoading] = useState(false);
   const [rerolling, setRerolling] = useState(false);
   const [error, setError] = useState("");
+  const [showHint, setShowHint] = useState(false);
 
   const loadNode = useCallback(async (nodeId?: string) => {
     try {
@@ -78,7 +79,28 @@ export default function ConnectPage() {
     <>
       {fromNode && (
         <>
-          <p className="text-sm text-muted mb-8">この曲につなげよう</p>
+          <div className="hint-row mb-8">
+            <p className="text-sm text-muted">この曲につなげよう</p>
+            <button
+              className="hint-toggle"
+              type="button"
+              onClick={() => setShowHint((prev) => !prev)}
+            >
+              <span className="material-icons" style={{ fontSize: 18 }}>help_outline</span>
+            </button>
+          </div>
+          {showHint && (
+            <div className="hint-box mb-8">
+              <p>こんな曲をつなげてみよう:</p>
+              <ul>
+                <li>曲調やジャンルが似ている曲</li>
+                <li>同じアニメ・ドラマ・CMで使われた曲</li>
+                <li>同じ気分のときに聴きたくなる曲</li>
+                <li>同じアーティストの別の曲</li>
+                <li>理由は何でもOK！</li>
+              </ul>
+            </div>
+          )}
           <YouTubeEmbed videoId={fromNode.id} />
           <div className="card">
             <div style={{ fontWeight: 700 }}>{fromNode.title}</div>
@@ -140,6 +162,11 @@ export default function ConnectPage() {
       </form>
 
       {error && <p className="error mt-8">{error}</p>}
+
+      <hr className="divider" />
+      <button className="btn btn-outline" onClick={() => navigate("/")}>
+        トップに戻る
+      </button>
     </>
   );
 }
