@@ -59,6 +59,22 @@ export default function HomePage() {
 
   return (
     <>
+      <div className="text-center">
+        <p className="text-muted mb-12">
+          ランダムな曲に出会って、つなげてみよう
+        </p>
+        <button
+          className="btn"
+          onClick={handleRandom}
+          disabled={loading}
+          style={{ fontSize: 18, padding: "16px 32px" }}
+        >
+          {loading ? "読み込み中..." : "ランダムにつなぐ"}
+        </button>
+      </div>
+
+      <hr className="divider" />
+
       <form onSubmit={handleSearch}>
         <label className="label">YouTube URLで曲を検索</label>
         <input
@@ -74,7 +90,7 @@ export default function HomePage() {
         {url.trim() && !isValidYoutubeUrl(url.trim()) && (
           <p className="error mt-8">YouTube の URL を入力してください</p>
         )}
-        <button className="btn mt-12" type="submit" disabled={loading || (!!url.trim() && !isValidYoutubeUrl(url.trim()))}>
+        <button className="btn btn-outline mt-12" type="submit" disabled={loading || (!!url.trim() && !isValidYoutubeUrl(url.trim()))}>
           検索する
         </button>
       </form>
@@ -91,21 +107,6 @@ export default function HomePage() {
           </button>
         </div>
       )}
-
-      <hr className="divider" />
-
-      <div className="text-center">
-        <p className="text-muted text-sm mb-8">
-          ランダムな曲に出会って、つなげてみよう
-        </p>
-        <button
-          className="btn btn-outline"
-          onClick={handleRandom}
-          disabled={loading}
-        >
-          ランダムにつなぐ
-        </button>
-      </div>
 
       {error && <p className="error mt-8">{error}</p>}
     </>
