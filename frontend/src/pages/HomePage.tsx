@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../api/client";
 import { isValidYoutubeUrl } from "../utils/youtube";
+import SampleMarquee from "../components/SampleMarquee";
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -113,6 +114,8 @@ export default function HomePage() {
       )}
 
       {error && <p className="error mt-8">{error}</p>}
+
+      <SampleMarquee />
     </>
   );
 }
