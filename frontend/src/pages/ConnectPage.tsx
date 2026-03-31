@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
 import { api, type Node as NodeType } from "../api/client";
 import YouTubeEmbed from "../components/YouTubeEmbed";
 import { isValidYoutubeUrl } from "../utils/youtube";
@@ -80,21 +82,27 @@ export default function ConnectPage() {
         <>
           <div className="hint-row mb-8">
             <p className="text-sm text-muted">この曲につなげよう</p>
-            <div className="tooltip-wrapper">
+            <Tippy
+              content={
+                <div>
+                  <p style={{ marginBottom: 4 }}>こんな曲をつなげてみよう:</p>
+                  <ul style={{ paddingLeft: 18, margin: 0 }}>
+                    <li>曲調やジャンルが似ている曲</li>
+                    <li>同じアニメ・ドラマ・CMで使われた曲</li>
+                    <li>同じ気分のときに聴きたくなる曲</li>
+                    <li>同じアーティストの別の曲</li>
+                    <li>理由は何でもOK！</li>
+                  </ul>
+                </div>
+              }
+              placement="bottom-start"
+              trigger="mouseenter click"
+              interactive={true}
+            >
               <span className="hint-toggle">
                 <span className="material-icons" style={{ fontSize: 18 }}>help_outline</span>
               </span>
-              <div className="tooltip-bubble">
-                <p>こんな曲をつなげてみよう:</p>
-                <ul>
-                  <li>曲調やジャンルが似ている曲</li>
-                  <li>同じアニメ・ドラマ・CMで使われた曲</li>
-                  <li>同じ気分のときに聴きたくなる曲</li>
-                  <li>同じアーティストの別の曲</li>
-                  <li>理由は何でもOK！</li>
-                </ul>
-              </div>
-            </div>
+            </Tippy>
           </div>
           <YouTubeEmbed videoId={fromNode.id} />
           <div className="card">
