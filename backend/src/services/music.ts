@@ -1,9 +1,9 @@
-export type MusicPlatform = "youtube" | "spotify";
+export type MusicPlatform = "youtube" | "spotify" | "niconico";
 
 export interface ParsedUrl {
   platform: MusicPlatform;
   rawId: string;
-  nodeId: string; // "yt:xxx" or "sp:xxx"
+  nodeId: string; // "yt:xxx", "sp:xxx", "nc:xxx"
 }
 
 export interface TrackInfo {
@@ -18,6 +18,9 @@ const YOUTUBE_PATTERN =
 const SPOTIFY_PATTERN =
   /(?:open\.spotify\.com\/(?:intl-[a-z]{2}\/)?track\/|spotify:track:)([a-zA-Z0-9]{22})/;
 
+const NICONICO_PATTERN =
+  /(?:nicovideo\.jp\/watch\/|nico\.ms\/)((?:sm|nm|so)\d+)/;
+
 export function parseUrl(url: string): ParsedUrl | null {
   const ytMatch = url.match(YOUTUBE_PATTERN);
   if (ytMatch) {
@@ -27,6 +30,11 @@ export function parseUrl(url: string): ParsedUrl | null {
   const spMatch = url.match(SPOTIFY_PATTERN);
   if (spMatch) {
     return { platform: "spotify", rawId: spMatch[1], nodeId: `sp:${spMatch[1]}` };
+  }
+
+  const ncMatch = url.match(NICONICO_PATTERN);
+  if (ncMatch) {
+    return { platform: "niconico", rawId: ncMatch[1], nodeId: `nc:${ncMatch[1]}` };
   }
 
   return null;
@@ -47,19 +55,35 @@ export async function fetchTrackInfo(parsed: ParsedUrl): Promise<TrackInfo> {
     };
   }
 
-  const oembedUrl = `https://open.spotify.com/oembed?url=https://open.spotify.com/track/${parsed.rawId}`;
-  const res = await fetch(oembedUrl);
-  if (!res.ok) {
-    throw new Error(`Spotify oEmbed API error: ${res.status}`);
+  if (parsed.platform === "spotify") {
+    const oembedUrl = `https://open.spotify.com/oembed?url=https://open.spotify.com/track/${parsed.rawId}`;
+    const res = await fetch(oembedUrl);
+    if (!res.ok) {
+      throw new Error(`Spotify oEmbed API error: ${res.status}`);
+    }
+    const data = (await res.json()) as {
+      title: string;
+      author_name?: string;
+      thumbnail_url?: string;
+    };
+    return {
+      title: data.title,
+      channelName: data.author_name ?? "",
+      thumbnailUrl: data.thumbnail_url ?? "",
+    };
   }
-  const data = (await res.json()) as {
-    title: string;
-    author_name?: string;
-    thumbnail_url?: string;
-  };
-  return {
-    title: data.title,
-    channelName: data.author_name ?? "",
-    thumbnailUrl: data.thumbnail_url ?? "",
-  };
+
+  // niconico
+  const apiUrl = `https://ext.nicovideo.jp/api/getthumbinfo/${parsed.rawId}`;
+  const res = await fetch(apiUrl);
+  if (!res.ok) {
+    throw new Error(`niconico API error: ${res.status}`);
+  }
+  const xml = await res.text();
+
+  const title = xml.match(/<title>(.*?)<\/title>/)?.[1] ?? "";
+  const channelName = xml.match(/<user_nickname>(.*?)<\/user_nickname>/)?.[1] ?? "";
+  const thumbnailUrl = xml.match(/<thumbnail_url>(.*?)<\/thumbnail_url>/)?.[1] ?? "";
+
+  return { title, channelName, thumbnailUrl };
 }

@@ -128,7 +128,7 @@ export default function ConnectPage() {
       )}
 
       <form onSubmit={handleSubmit} className="mt-16">
-        <label className="label">つなぎたい曲の URL（YouTube / Spotify）</label>
+        <label className="label">つなぎたい曲の URL（YouTube / Spotify / ニコニコ）</label>
         <input
           className="input"
           type="text"
@@ -137,7 +137,7 @@ export default function ConnectPage() {
           onChange={(e) => setUrl(e.target.value)}
         />
         {url.trim() && !isValidMusicUrl(url.trim()) && (
-          <p className="error mt-8">YouTube または Spotify の URL を入力してください</p>
+          <p className="error mt-8">YouTube / Spotify / ニコニコ の URL を入力してください</p>
         )}
 
         <div className="mt-12">

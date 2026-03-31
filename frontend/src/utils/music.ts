@@ -4,6 +4,9 @@ const YOUTUBE_PATTERN =
 const SPOTIFY_PATTERN =
   /(?:open\.spotify\.com\/(?:intl-[a-z]{2}\/)?track\/|spotify:track:)([a-zA-Z0-9]{22})/;
 
+const NICONICO_PATTERN =
+  /(?:nicovideo\.jp\/watch\/|nico\.ms\/)((?:sm|nm|so)\d+)/;
+
 export function isValidMusicUrl(url: string): boolean {
-  return YOUTUBE_PATTERN.test(url) || SPOTIFY_PATTERN.test(url);
+  return YOUTUBE_PATTERN.test(url) || SPOTIFY_PATTERN.test(url) || NICONICO_PATTERN.test(url);
 }

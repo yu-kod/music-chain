@@ -17,6 +17,20 @@ export default function MusicEmbed({ nodeId }: Props) {
     );
   }
 
+  if (nodeId.startsWith("nc:")) {
+    const videoId = nodeId.slice(3);
+    return (
+      <div className="niconico-embed">
+        <iframe
+          src={`https://embed.nicovideo.jp/watch/${videoId}?persistence=1&oldScript=1&referer=&from=0`}
+          allow="autoplay"
+          allowFullScreen
+          title="niconico video"
+        />
+      </div>
+    );
+  }
+
   // YouTube (yt: prefix or legacy)
   const videoId = nodeId.startsWith("yt:") ? nodeId.slice(3) : nodeId;
   return (

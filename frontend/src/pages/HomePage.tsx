@@ -75,7 +75,7 @@ export default function HomePage() {
       </div>
 
       <form onSubmit={handleSearch}>
-        <label className="label">URLで曲を検索（YouTube / Spotify）</label>
+        <label className="label">URLで曲を検索（YouTube / Spotify / ニコニコ）</label>
         <div className="search-row">
           <input
             className="input"
@@ -96,7 +96,7 @@ export default function HomePage() {
           </button>
         </div>
         {url.trim() && !isValidMusicUrl(url.trim()) && (
-          <p className="error mt-8">YouTube または Spotify の URL を入力してください</p>
+          <p className="error mt-8">YouTube / Spotify / ニコニコ の URL を入力してください</p>
         )}
       </form>
 
