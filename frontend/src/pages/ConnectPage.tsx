@@ -132,7 +132,7 @@ export default function ConnectPage() {
         <input
           className="input"
           type="text"
-          placeholder="https://www.youtube.com/watch?v=... or https://open.spotify.com/track/..."
+          placeholder="https://www.youtube.com/watch?v=..."
           value={url}
           onChange={(e) => setUrl(e.target.value)}
         />
