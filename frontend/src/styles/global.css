@@ -393,22 +393,19 @@ a:hover {
   overflow: hidden;
   mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
   -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  cursor: grab;
+  user-select: none;
+  touch-action: pan-y;
+}
+
+.marquee-track:active {
+  cursor: grabbing;
 }
 
 .marquee-content {
   display: flex;
   gap: 12px;
   width: max-content;
-  animation: marquee-scroll 30s linear infinite;
-}
-
-.marquee-content:hover {
-  animation-play-state: paused;
-}
-
-@keyframes marquee-scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
 }
 
 .marquee-item {
