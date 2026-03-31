@@ -67,7 +67,6 @@ export default function HomePage() {
           className="btn"
           onClick={handleRandom}
           disabled={loading}
-          style={{ fontSize: 18, padding: "16px 32px" }}
         >
           {loading ? "読み込み中..." : "ランダムにつなぐ"}
         </button>
@@ -77,22 +76,28 @@ export default function HomePage() {
 
       <form onSubmit={handleSearch}>
         <label className="label">YouTube URLで曲を検索</label>
-        <input
-          className="input"
-          type="text"
-          placeholder="https://www.youtube.com/watch?v=..."
-          value={url}
-          onChange={(e) => {
-            setUrl(e.target.value);
-            setNotFound(false);
-          }}
-        />
+        <div className="search-row">
+          <input
+            className="input"
+            type="text"
+            placeholder="https://www.youtube.com/watch?v=..."
+            value={url}
+            onChange={(e) => {
+              setUrl(e.target.value);
+              setNotFound(false);
+            }}
+          />
+          <button
+            className="btn-icon"
+            type="submit"
+            disabled={loading || !url.trim() || !isValidYoutubeUrl(url.trim())}
+          >
+            <span className="material-icons">search</span>
+          </button>
+        </div>
         {url.trim() && !isValidYoutubeUrl(url.trim()) && (
           <p className="error mt-8">YouTube の URL を入力してください</p>
         )}
-        <button className="btn btn-outline mt-12" type="submit" disabled={loading || (!!url.trim() && !isValidYoutubeUrl(url.trim()))}>
-          検索する
-        </button>
       </form>
 
       {notFound && (
