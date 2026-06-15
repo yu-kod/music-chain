@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
-    "build:lambda": "npx esbuild src/lambda.ts --bundle --platform=node --target=node20 --outfile=dist/lambda.js --external:@aws-sdk/*",
+    "build:lambda": "npx esbuild src/lambda.ts --bundle --platform=node --target=node24 --outfile=dist/lambda.js --external:@aws-sdk/*",
     "start": "node dist/index.js",
     "seed": "tsx src/db/seed.ts",
     "migrate:prefix": "tsx src/db/migrate-prefix.ts"

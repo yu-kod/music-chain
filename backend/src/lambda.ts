@@ -4,10 +4,6 @@ import { createApp } from "./app";
 const app = createApp();
 const serverlessExpressInstance = serverlessExpress({ app });
 
-export const handler = (event: unknown, context: unknown) =>
-  new Promise((resolve, reject) => {
-    serverlessExpressInstance(event, context, (err: unknown, result: unknown) => {
-      if (err) reject(err);
-      else resolve(result);
-    });
-  });
+export const handler = async (event: unknown, context: unknown) => {
+  return serverlessExpressInstance(event, context);
+};
