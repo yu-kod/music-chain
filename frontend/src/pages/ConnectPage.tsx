@@ -40,7 +40,7 @@ export default function ConnectPage() {
     setError("");
     try {
       const node = await api.getRandomNode();
-      setFromNode(node);
+      navigate(`/connect/${node.id}`);
     } catch (err: any) {
       setError(err.message || "曲の取得に失敗しました");
     } finally {
